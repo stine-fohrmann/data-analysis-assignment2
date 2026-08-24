@@ -215,3 +215,76 @@ def plot_time_series(
     plt.tight_layout()
     
     return fig, ax
+
+
+def plot_time_series_from_dataarray(
+    da: Union[xr.DataArray, List[xr.DataArray]],
+    title: str = None,
+    ylabel: str = None,
+    labels: Union[str, List[str]] = '',
+    colors: Union[str, List[str]] = None,
+    figsize: Tuple[int, int] = (12, 6)
+) -> Tuple[Any, Any]:
+    """Plot a simple time series from an xarray DataArray.
+
+    Parameters
+    ----------
+    da : xr.DataArray or list of xr.DataArray
+        Single or multiple data arrays with a time dimension.
+    title : str, optional
+        Plot title. If None, uses variable's long_name or the variable name.
+    ylabel : str, optional
+        Y-axis label. If None, uses variable's long_name and units.
+    labels: str or list of str, optional
+        Plot labels in legend. Only shown for multiple Data arrays.
+    colors : str or list of str, optional
+        Line color(s). If unspecified, Matplotlib's Tableau Palette is used.
+    figsize : tuple, optional
+        Figure size as (width, height). Default is (12, 6).
+
+    Returns
+    -------
+    tuple
+        Figure and axis objects from matplotlib.
+    """
+
+    # Make list of data arrays if only one given
+    if isinstance(da, xr.DataArray):
+        da = [da]
+    
+    # If only one color given, use for all plots 
+    if isinstance(colors, str):
+        colors = [colors] * len(da)
+    
+    # If only one label given, use for all plots
+    if isinstance(labels, str):
+        labels = [labels] * len(da)
+    
+    fig, ax = plt.subplots(figsize=figsize)
+    for i, d in enumerate(da):
+        ax.plot(d.TIME, d.values, color=colors[i] if colors else None, 
+                lw=1.0, label=labels[i] if labels else None)
+    
+    # Set title
+    if title is None:
+        title = da[0].attrs.get("long_name")
+    ax.set_title(title)
+    
+    # Set ylabel
+    if ylabel is None:
+        label = da[0].attrs.get("long_name")
+        units = da[0].attrs.get("units", "")
+        ylabel = f"{label} [{units}]" if units else label
+    ax.set_ylabel(ylabel)
+
+    # Add legend if multiple data arrays
+    if len(da) > 1:
+        ax.legend()
+    
+    ax.set_xlabel("Time")
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    
+    return fig, ax
