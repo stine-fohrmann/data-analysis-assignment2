@@ -161,7 +161,8 @@ def interior_geostrophic_transport(
     transport_per_depth = (phi_e - phi_w) / f  # m2/s
     depth = -gsw.z_from_p(p, lat)  # m, increasing downward
     upper = depth <= z_max  # surface -> AMOC-max depth
-    trapezoid = getattr(np, "trapezoid", np.trapz)  # numpy>=2 renamed trapz
+    # trapezoid = getattr(np, "trapezoid", np.trapz)  # numpy>=2 renamed trapz
+    trapezoid = getattr(np, "trapezoid", np.trapezoid)  # numpy>=2 renamed trapz
     transport = trapezoid(transport_per_depth[upper], depth[upper], axis=0) / 1e6
 
     return xr.DataArray(
