@@ -134,7 +134,20 @@ def cross_correlation(
     ``-k``; so a **negative** peak lag means ``x`` leads ``y``, a positive one
     means ``y`` leads ``x``.
     """
-    # xa = (x - np.mean(x)) / np.std(x)
-    # ya = (y - np.mean(y)) / np.std(y)
+
+    # Remove any points where either series has NaN
+    mask = ~ (np.isnan(x) | np.isnan(y))
+    x = x[mask]
+    y = y[mask]
+
+    # Normalize series -> same mean (0) and std (1)
+    xa = (x - np.mean(x)) / np.std(x)
+    ya = (y - np.mean(y)) / np.std(y)
+
+    N = len(x)
+
     # then signal.correlate(xa, ya, mode="full") / N and signal.correlation_lags(...)
-    raise NotImplementedError("cross_correlation")
+    r = signal.correlate(xa, ya, mode="full", method='direct') / N
+    lags = signal.correlation_lags(N, N, mode='full')
+
+    return lags, r
