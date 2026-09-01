@@ -37,7 +37,7 @@ def plot_monthly_transport(
     ax.plot(
         ds_monthly.TIME,
         ds_monthly[var],
-        color="red",
+        color="darkblue",
         linewidth=1.0,
         label="Monthly Avg",
     )
