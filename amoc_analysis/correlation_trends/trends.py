@@ -46,6 +46,18 @@ class TrendResult(NamedTuple):
     t_naive: float
     t_eff: float
 
+    def printResult(self, name):
+        print(name)
+        print('----------')
+        print(f'slope    = {self.slope*365*10:.3f} \u00B1 {self.se_eff*365*10:.3f} Sv/decade')
+        print(f'SE_naive = {self.se*365*10:.3f} Sv/decade')
+        print(f'SE_eff   = {self.se_eff*365*10:.3f} Sv/decade')
+        print(f'slope/SE     = t_naive = {self.t_naive:.3f} \u03C3')
+        print(f'slope/SE_eff = t_eff   = {self.t_eff:.3f} \u03C3')
+        print(f'N_eff    = {self.n_eff:.0f}')
+        print(f'p_naive  = {self.p_naive:.4f}')
+        print(f'p_eff    = {self.p_eff:.3f}')
+        print(f'95% significance (|t_eff| > 1.96): {abs(self.t_eff) > 1.96}')
 
 def fit_trend(t: ArrayLike, x: ArrayLike) -> tuple[float, float]:
     """Least-squares straight-line fit.
