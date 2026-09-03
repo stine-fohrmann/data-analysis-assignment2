@@ -98,9 +98,50 @@ def trend_with_significance(t: ArrayLike, x: ArrayLike, dt: float) -> TrendResul
     much the fitted slope would wobble on resampling -- not the scatter of the
     data about the line. Significant at 95% means ``|slope| > ~1.96 * SE``.
     """
-    # slope, intercept = fit_trend(t, x)
-    # resid = x - (slope * t + intercept)
+
+    t = np.asarray(t, float)
+    x = np.asarray(x, float)
+    N = t.size
+    
+    # Fit linear trend
+    slope, intercept = fit_trend(t, x)
+    
+    # Residuals
+    resid = x - (slope * t + intercept)
+    
+    # OLS standard error of slope
     # OLS slope SE:  sqrt( sum(resid**2)/(N-2) / sum((t - t.mean())**2) )
+    s_sq = np.sum(resid**2) / (N - 2)   # variance s²
+    ss_t = np.sum((t - t.mean())**2)    # spread of t
+    se = np.sqrt(s_sq / ss_t)           # standard error of slope
+    
+    # Effective sample size from residuals
     # effective sample size from the residuals:  n_eff = effective_dof(resid, dt)
-    # se_eff = se * sqrt(N / n_eff);  t = slope/se;  p = 2 * stats.t.sf(|t|, dof)
-    raise NotImplementedError("trend_with_significance")
+    n_eff = effective_dof(resid, dt)
+    
+    # Effective standard error
+    # se_eff = se * sqrt(N / n_eff)
+    se_eff = se * np.sqrt(N / n_eff)
+    
+    # Slope in units of its standard error
+    # t = slope/se
+    t_naive = slope / se
+    t_eff = slope / se_eff
+    
+    # p-values from t-distribution
+    # naive dof = N - 2, effective dof = n_eff - 2
+    # p = 2 * stats.t.sf(|t|, dof)
+    p_naive = 2 * stats.t.sf(np.abs(t_naive), N - 2)
+    p_eff = 2 * stats.t.sf(np.abs(t_eff), max(2, n_eff - 2))
+    
+    return TrendResult(
+        slope=slope,
+        intercept=intercept,
+        se=se,
+        se_eff=se_eff,
+        p_naive=p_naive,
+        p_eff=p_eff,
+        n_eff=n_eff,
+        t_naive=t_naive,
+        t_eff=t_eff
+    )
