@@ -103,7 +103,21 @@ def effective_dof(x: ArrayLike, dt: float, biased: bool = True) -> float:
     # tstar = integral_timescale(x, dt, biased=biased)
     # record = N * dt  (N = number of finite samples)
     # EDOF = record / (2 * T*)   -- the factor of 2 is DOF -> EDOF
-    raise NotImplementedError("effective_dof")
+    # raise NotImplementedError("effective_dof")
+
+    # Count finite samples
+    x = x[np.isfinite(x)]
+    N = x.size
+
+    # Compute integral timescale T*
+    tstar = integral_timescale(x, dt, biased)
+    
+    # Total record duration
+    record = N * dt
+
+    # Equivalent degrees of freedom = DOF/2
+    edof = record/(2*tstar)
+    return edof
 
 
 def cross_correlation(
