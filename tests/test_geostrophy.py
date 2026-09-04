@@ -11,8 +11,8 @@ import numpy as np
 import pytest
 
 pytest.importorskip("gsw")
-from correlation_trends.data_io import load_amoc, load_ts_gridded
-from correlation_trends.geostrophy import interior_geostrophic_transport
+from amoc_analysis.correlation_trends.data_io import load_amoc, load_ts_gridded
+from amoc_analysis.correlation_trends.geostrophy import interior_geostrophic_transport
 
 
 @pytest.fixture(scope="module")

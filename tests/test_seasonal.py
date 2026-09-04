@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 import xarray as xr
-from correlation_trends.seasonal import remove_seasonal_cycle, seasonal_climatology
+from amoc_analysis.correlation_trends.seasonal import remove_seasonal_cycle, seasonal_climatology
 
 
 def _monthly_series(

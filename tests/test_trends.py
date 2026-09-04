@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from correlation_trends.trends import fit_trend, trend_with_significance
+from amoc_analysis.correlation_trends.trends import fit_trend, trend_with_significance
 
 
 def _ar1(n: int, r: float, seed: int = 0) -> np.ndarray:

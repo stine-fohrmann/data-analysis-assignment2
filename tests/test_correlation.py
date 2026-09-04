@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from correlation_trends.correlation import (
+from amoc_analysis.correlation_trends.correlation import (
     autocorr,
     cross_correlation,
     effective_dof,
