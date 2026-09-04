@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-import xarray as xr
 import pytest
-
-from correlation_trends.seasonal import seasonal_climatology, remove_seasonal_cycle
+import xarray as xr
+from correlation_trends.seasonal import remove_seasonal_cycle, seasonal_climatology
 
 
 def _monthly_series(

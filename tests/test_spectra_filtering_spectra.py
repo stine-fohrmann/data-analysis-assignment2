@@ -9,13 +9,13 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+from amoc_analysis.spectra_filtering.leakage import synthetic_tone
 from amoc_analysis.spectra_filtering.spectra import (
     frequency_axis,
+    parseval_ratio,
     raw_periodogram,
     welch_psd,
-    parseval_ratio,
 )
-from amoc_analysis.spectra_filtering.leakage import synthetic_tone
 
 DT = 0.5  # days (12-hour grid)
 
@@ -42,7 +42,8 @@ def test_welch_reduces_variance_relative_to_periodogram() -> None:
     _, pgram = raw_periodogram(x, DT)
     _, welch = welch_psd(x, DT, segment_length=512, overlap=0.5)
     # crude smoothness proxy: relative scatter of neighbouring bins
-    scatter = lambda p: np.std(np.diff(p)) / np.mean(p)
+    def scatter(p):
+        return np.std(np.diff(p)) / np.mean(p)
     assert scatter(welch) < scatter(pgram)
 
 

@@ -90,7 +90,7 @@ def seasonal_cycle(
 
     # Create pandas Series with datetime index
     s = pd.Series(values, index=pd.DatetimeIndex(time))
-    
+
     # Extract grouping key from 'by' parameter
     if by == "month":
         group_key = s.index.month
@@ -98,10 +98,10 @@ def seasonal_cycle(
         group_key = s.index.dayofyear
     else:
         raise ValueError(f"'by' must be 'month' or 'dayofyear', got '{by}'")
-    
+
     # Group by period and aggregate
     clim = s.groupby(group_key).agg(["mean", "median"])
-    
+
     return clim
 
 
@@ -147,43 +147,43 @@ def decorrelation_timescale(
 
     filled_values = fill_gaps(values)
     N = len(filled_values)
-    
+
     # 1. Remove the mean
     # values_centered = values - np.mean(values)
     values_centered = filled_values - np.mean(filled_values)
-    
+
     # 2. Form the normalised autocovariance R (autocorrelation) at non-negative lags
     raw_autocov = np.correlate(values_centered, values_centered, mode='full')
     autocov_positive = raw_autocov[N-1:]
-    
+
     variance = autocov_positive[0]
-    
+
     if variance == 0:
         return 0.0, 0.0
-    
+
     R = autocov_positive / variance
-    
+
     # 3. Integrate R from lag 0 until its first zero crossing
     zero_crossings = np.where(R <= 0)[0]
-    
+
     if len(zero_crossings) == 0:
         cutoff = len(R) - 1
     else:
         cutoff = zero_crossings[0]
-    
+
     if cutoff == 0:
         integral_sum = 0.0
     else:
         r_left = R[:cutoff]
         r_right = R[1:cutoff+1]
         integral_sum = np.sum((r_left + r_right) / 2)
-    
+
     integral_scale = integral_sum * dt
-    
+
     # 4. Calculate ndof
     if integral_scale == 0:
         ndof = 0.0
     else:
         ndof = (N * dt) / integral_scale - 1.0
-    
+
     return float(integral_scale), float(ndof)

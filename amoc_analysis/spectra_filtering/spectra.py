@@ -68,9 +68,9 @@ def raw_periodogram(
     that :func:`parseval_ratio` returns approximately 1.
     """
 
-    n = len(x)
+    len(x)
 
-    # Detrend, apply specified window and compute periodogram 
+    # Detrend, apply specified window and compute periodogram
     freq, psd = signal.periodogram(x, fs=1/dt_days, detrend='linear', window=window)
 
     # Verify that parseval_ratio = 1
@@ -78,7 +78,7 @@ def raw_periodogram(
     print(f'Parseval ratio = {ratio}')
 
     return freq, psd
-    
+
 
 
 def welch_psd(
@@ -121,14 +121,14 @@ def welch_psd(
 
     TODO (student): implement the segmenting, windowing, averaging, and normalisation.
     """
-    freq, psd = signal.welch(x, fs=1/dt_days, 
+    freq, psd = signal.welch(x, fs=1/dt_days,
         detrend='constant',     # detrending is done before input into this function
         window=window,
         nperseg=segment_length,
         noverlap=segment_length*overlap,
         # scaling='density'
         )
-    
+
     return freq, psd
 
 

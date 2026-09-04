@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Tuple, Union
+from typing import Any, List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import xarray as xr
@@ -143,11 +143,13 @@ def show_attributes(data: Union[str, xr.Dataset]) -> DataFrame:
         print(f"Information is based on file: {data}")
         dataset = xr.open_dataset(data)
         attributes = dataset.attrs.keys()
-        get_attr = lambda key: dataset.attrs[key]
+        def get_attr(key):
+            return dataset.attrs[key]
     elif isinstance(data, xr.Dataset):
         print("Information is based on xarray Dataset")
         attributes = data.attrs.keys()
-        get_attr = lambda key: data.attrs[key]
+        def get_attr(key):
+            return data.attrs[key]
     else:
         raise TypeError("Input data must be a file path (str) or an xarray Dataset")
 
@@ -162,8 +164,8 @@ def show_attributes(data: Union[str, xr.Dataset]) -> DataFrame:
 
 
 def plot_time_series(
-    ds: xr.Dataset, 
-    var: str, 
+    ds: xr.Dataset,
+    var: str,
     title: str = None,
     ylabel: str = None,
     color: str = "blue",
@@ -192,28 +194,28 @@ def plot_time_series(
         Figure and axis objects from matplotlib.
     """
     da = ds[var]
-    
+
     fig, ax = plt.subplots(figsize=figsize)
     ax.plot(ds.TIME, da, color=color, linewidth=1.0)
-    
+
     # Set title
     if title is None:
         title = da.attrs.get("long_name", var)
     ax.set_title(title)
-    
+
     # Set ylabel
     if ylabel is None:
         label = da.attrs.get("long_name", var)
         units = da.attrs.get("units", "")
         ylabel = f"{label} [{units}]" if units else label
     ax.set_ylabel(ylabel)
-    
+
     ax.set_xlabel("Time")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    
+
     return fig, ax
 
 
@@ -251,25 +253,25 @@ def plot_time_series_from_dataarray(
     # Make list of data arrays if only one given
     if isinstance(da, xr.DataArray):
         da = [da]
-    
-    # If only one color given, use for all plots 
+
+    # If only one color given, use for all plots
     if isinstance(colors, str):
         colors = [colors] * len(da)
-    
+
     # If only one label given, use for all plots
     if isinstance(labels, str):
         labels = [labels] * len(da)
-    
+
     fig, ax = plt.subplots(figsize=figsize)
     for i, d in enumerate(da):
-        ax.plot(d.TIME, d.values, color=colors[i] if colors else None, 
+        ax.plot(d.TIME, d.values, color=colors[i] if colors else None,
                 lw=1.0, label=labels[i] if labels else None)
-    
+
     # Set title
     if title is None:
         title = da[0].attrs.get("long_name")
     ax.set_title(title)
-    
+
     # Set ylabel
     if ylabel is None:
         label = da[0].attrs.get("long_name")
@@ -280,11 +282,11 @@ def plot_time_series_from_dataarray(
     # Add legend if multiple data arrays
     if len(da) > 1:
         ax.legend()
-    
+
     ax.set_xlabel("Time")
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
-    
+
     return fig, ax

@@ -111,7 +111,7 @@ def effective_dof(x: ArrayLike, dt: float, biased: bool = True) -> float:
 
     # Compute integral timescale T*
     tstar = integral_timescale(x, dt, biased)
-    
+
     # Total record duration
     record = N * dt
 

@@ -7,9 +7,9 @@ import pandas as pd
 import pytest
 
 from amoc_analysis.spectra_filtering.analysis import (
-    summary_stats,
-    seasonal_cycle,
     decorrelation_timescale,
+    seasonal_cycle,
+    summary_stats,
 )
 
 

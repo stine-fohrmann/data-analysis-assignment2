@@ -35,7 +35,7 @@ def test_download_file_http(mock_get):
 
     with tempfile.TemporaryDirectory() as tmpdir:
         url = "https://example.com/testfile.txt"
-        out_path = Path(tmpdir) / "testfile.txt"
+        Path(tmpdir) / "testfile.txt"
 
         downloaded = analysis.download_file(url, tmpdir)
         assert Path(downloaded).exists()
@@ -92,7 +92,7 @@ def test_safe_update_attrs_existing_key_logs(capsys):
     new_attrs = {"project": "OSNAP"}
 
     analysis.safe_update_attrs(ds, new_attrs, overwrite=False, verbose=True)
-    
+
     captured = capsys.readouterr()
     assert "Attribute 'project' already exists in dataset attrs and will not be overwritten." in captured.out
 

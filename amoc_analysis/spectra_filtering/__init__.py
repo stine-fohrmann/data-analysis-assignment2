@@ -7,11 +7,11 @@ stubs in the student version — the accompanying ``pytest`` checks encode the
 behaviour they must satisfy.
 """
 
-from .data_io import load_moc, fill_gaps
-from .filters import nyquist_frequency, butterworth_squared_response, tukey_lowpass
-from .spectra import frequency_axis, raw_periodogram, welch_psd, parseval_ratio
+from .analysis import decorrelation_timescale, seasonal_cycle, summary_stats
+from .data_io import fill_gaps, load_moc
+from .filters import butterworth_squared_response, nyquist_frequency, tukey_lowpass
 from .leakage import synthetic_tone
-from .analysis import summary_stats, seasonal_cycle, decorrelation_timescale
+from .spectra import frequency_axis, parseval_ratio, raw_periodogram, welch_psd
 
 __all__ = [
     "load_moc",

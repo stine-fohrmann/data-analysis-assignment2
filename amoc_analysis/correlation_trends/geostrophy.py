@@ -19,11 +19,10 @@ adjustment, which removes variance this simple estimate retains.
 
 from __future__ import annotations
 
+import gsw
 import numpy as np
 import xarray as xr
 from numpy.typing import ArrayLike, NDArray
-
-import gsw
 
 # (temperature var, salinity var, representative longitude) for each boundary
 WEST = ("TEMP_WEST", "PSAL_WEST", -76.74)

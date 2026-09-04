@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-
 from correlation_trends.correlation import (
     autocorr,
-    integral_timescale,
-    effective_dof,
     cross_correlation,
+    effective_dof,
+    integral_timescale,
 )
 
 
