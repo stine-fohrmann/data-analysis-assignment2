@@ -1,6 +1,5 @@
-# Assignment 1: Characterising an AMOC time series
+# Assignment 2: Geostrophic transport and relating AMOC series
 
-- Chosen array: MOVE 16°N
 - Report/write-up: [report.md](report.md)
-- Script for making the plots: [notebooks/main.ipynb](notebooks/main.ipynb)
+- Script for making the plots: [notebooks/](notebooks/)
 - Figure folder: [plots](plots)
